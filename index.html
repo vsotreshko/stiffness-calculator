@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Жорсткість на згин — Поліуретан</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;600&display=swap');
+
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --border: #2a2a2a;
+    --accent: #e8ff4a;
+    --accent2: #4af0e8;
+    --accent3: #ff6b4a;
+    --text: #e8e8e8;
+    --muted: #666;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding: 24px 16px;
+  }
+
+  h1 {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 28px;
+  }
+
+  .variants {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .variant-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+
+  .variant-card:hover { border-color: #3a3a3a; }
+
+  .variant-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .variant-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .variant-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    flex: 1;
+  }
+
+  .remove-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: all 0.15s;
+  }
+
+  .remove-btn:hover { border-color: var(--accent3); color: var(--accent3); }
+
+  .inputs-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 8px;
+  }
+
+  .input-group label {
+    display: block;
+    font-size: 10px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .input-group input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    padding: 8px 10px;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .input-group input:focus { border-color: var(--accent); }
+
+  .add-btn {
+    width: 100%;
+    background: none;
+    border: 1px dashed var(--border);
+    color: var(--muted);
+    padding: 11px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    transition: all 0.15s;
+    margin-bottom: 24px;
+  }
+
+  .add-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Results */
+  .results-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 14px;
+  }
+
+  .result-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .result-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    width: 100px;
+    flex-shrink: 0;
+  }
+
+  .bar-wrap {
+    flex: 1;
+    height: 28px;
+    background: var(--surface);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    min-width: 2px;
+  }
+
+  .bar-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: #000;
+    white-space: nowrap;
+  }
+
+  .result-ei {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text);
+    width: 80px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* Formula box */
+  .formula-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    margin-top: 24px;
+  }
+
+  .formula-box h3 {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 10px;
+  }
+
+  .formula-line {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--accent2);
+    margin-bottom: 4px;
+  }
+
+  .formula-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  .highlight { color: var(--accent); }
+
+  /* Winner badge */
+  .winner-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    background: var(--accent);
+    color: #000;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-left: 6px;
+    vertical-align: middle;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 20px 0;
+  }
+
+  .ratio-row {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  .ratio-val { color: var(--accent3); }
+</style>
+</head>
+<body>
+
+<h1>Жорсткість на згин</h1>
+<div class="subtitle">Поліуретан · EI = E × b × t³ / 12</div>
+
+<div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:20px;display:flex;align-items:center;gap:14px;">
+  <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;white-space:nowrap;">Ширина b (мм)</div>
+  <input type="number" id="global-width" value="20" min="1" max="500" step="1"
+    style="width:100px;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:16px;padding:7px 10px;border-radius:5px;outline:none;"
+    oninput="globalWidth=parseFloat(this.value)||1;render()">
+  <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">— спільна для всіх варіантів</div>
+</div>
+
+<div class="variants" id="variants"></div>
+
+<button class="add-btn" onclick="addVariant()">+ додати варіант</button>
+
+<div class="results-title" id="results-title">Порівняння EI (ширина: 20 мм)</div>
+<div id="results"></div>
+
+<hr class="divider">
+<div id="ratios"></div>
+
+<div class="formula-box">
+  <h3>Формули</h3>
+  <div class="formula-line">E (МПа) = 0.0981 × (56 + 7.66 × ShoreA)</div>
+  <div class="formula-line">EI = E × b × t³ / 12</div>
+  <div class="formula-note">
+    <span class="highlight">t</span> — товщина (мм) &nbsp;·&nbsp;
+    <span class="highlight">b</span> — ширина (мм) &nbsp;·&nbsp;
+    <span class="highlight">E</span> — модуль Юнга &nbsp;·&nbsp;
+    Жорсткість пропорційна <span class="highlight">t³</span>
+  </div>
+</div>
+
+<script>
+const COLORS = ['#e8ff4a', '#4af0e8', '#ff6b4a', '#b44aff', '#4affb4', '#ff4ab4'];
+
+let globalWidth = 20;
+
+let variants = [
+  { t: 2.0, shore: 85 },
+  { t: 2.0, shore: 90 },
+  { t: 1.0, shore: 90 },
+];
+
+function shoreToE(shore) {
+  return 0.0981 * (56 + 7.66 * shore);
+}
+
+function calcEI(t, shore, b) {
+  const E = shoreToE(shore);
+  return E * b * Math.pow(t, 3) / 12;
+}
+
+function render() {
+  document.getElementById('results-title').textContent = `Порівняння EI (ширина: ${globalWidth} мм)`;
+
+  // Render input cards
+  const container = document.getElementById('variants');
+  container.innerHTML = '';
+  variants.forEach((v, i) => {
+    const color = COLORS[i % COLORS.length];
+    const card = document.createElement('div');
+    card.className = 'variant-card';
+    card.innerHTML = `
+      <div class="variant-header">
+        <div class="variant-dot" style="background:${color}"></div>
+        <div class="variant-label">Варіант ${i + 1}</div>
+        ${variants.length > 1 ? `<button class="remove-btn" onclick="removeVariant(${i})">×</button>` : ''}
+      </div>
+      <div class="inputs-row">
+        <div class="input-group">
+          <label>Товщина (мм)</label>
+          <input type="number" value="${v.t}" min="0.5" max="10" step="0.5"
+            oninput="updateVariant(${i}, 't', this.value)">
+        </div>
+        <div class="input-group">
+          <label>Shore A</label>
+          <input type="number" value="${v.shore}" min="40" max="98" step="1"
+            oninput="updateVariant(${i}, 'shore', this.value)">
+        </div>
+        <div class="input-group">
+          <label>E (МПа)</label>
+          <input type="number" value="${shoreToE(v.shore).toFixed(1)}" readonly
+            style="color:${color};opacity:0.7">
+        </div>
+        <div class="input-group">
+          <label>EI (МПа·мм⁴)</label>
+          <input type="number" value="${calcEI(v.t, v.shore, globalWidth).toFixed(1)}" readonly
+            style="color:${color}">
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+
+  // Render results
+  const eis = variants.map(v => calcEI(v.t, v.shore, globalWidth));
+  const maxEI = Math.max(...eis);
+  const resultsDiv = document.getElementById('results');
+  resultsDiv.innerHTML = '';
+
+  eis.forEach((ei, i) => {
+    const color = COLORS[i % COLORS.length];
+    const pct = (ei / maxEI * 100).toFixed(1);
+    const isMax = ei === maxEI;
+    const row = document.createElement('div');
+    row.className = 'result-row';
+    row.innerHTML = `
+      <div class="result-name">${variants[i].t}мм / ${variants[i].shore}ShA${isMax ? '<span class="winner-badge">max</span>' : ''}</div>
+      <div class="bar-wrap">
+        <div class="bar" style="width:${pct}%;background:${color}">
+          <span class="bar-value">${pct}%</span>
+        </div>
+      </div>
+      <div class="result-ei">${ei.toFixed(0)} МПа·мм⁴</div>
+    `;
+    resultsDiv.appendChild(row);
+  });
+
+  // Ratios
+  const ratiosDiv = document.getElementById('ratios');
+  ratiosDiv.innerHTML = '';
+  if (variants.length >= 2) {
+    const base = eis[0];
+    const lines = eis.map((ei, i) => {
+      if (i === 0) return '';
+      const ratio = (ei / base).toFixed(2);
+      const dir = ei > base ? '▲' : '▼';
+      const pctDiff = ((ei - base) / base * 100).toFixed(0);
+      return `<div class="ratio-row">
+        <span>${variants[i].t}мм/${variants[i].shore}ShA  vs  ${variants[0].t}мм/${variants[0].shore}ShA</span>
+        <span class="ratio-val">${dir} ×${ratio} (${pctDiff > 0 ? '+' : ''}${pctDiff}%)</span>
+      </div>`;
+    }).join('');
+    ratiosDiv.innerHTML = lines;
+  }
+}
+
+function updateVariant(i, field, val) {
+  variants[i][field] = parseFloat(val) || 0;
+  render();
+}
+
+function addVariant() {
+  variants.push({ t: 2.0, shore: 85 });
+  render();
+}
+
+function removeVariant(i) {
+  variants.splice(i, 1);
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
